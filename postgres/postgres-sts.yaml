@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-switch-software-sts
+  namespace: switch-software
+spec:
+  selector:
+    matchLabels:
+      app: postgres-switch-software-sts
+  serviceName: "postgres-switch-software-sts"
+  replicas: 1 # by default is 1
+  minReadySeconds: 10 # by default is 0
+  template:
+    metadata:
+      labels:
+        app: postgres-switch-software-sts # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: postgres-switch-software
+          image: postgres:15.3
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-configmap
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                  configMapKeyRef:
+                    name: postgres-configmap
+                    key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - name: postgresdb
+              mountPath: /var/lib/postgresql/data
+#          envFrom:
+#            - configMapRef:
+#                name: postgres-configmap
+      volumes:
+        - name: postgresdb
+          persistentVolumeClaim:
+            claimName: postgres-switch-software-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: postgres-switch-software-svc
+  namespace: switch-software
+spec:
+  selector:
+    app: postgres-switch-software-sts
+  type: ClusterIP
+  ports:
+  - port: 5432
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: postgres-switch-software-np
+  namespace: switch-software
+spec:
+  podSelector:
+    matchLabels:
+      app: postgres-switch-software-svc
+  ingress:
+    - from:
+        - namespaceSelector:     # chooses all pods in namespaces labelled with team=operations
+            matchLabels:
+              app: switch-software
+        - podSelector:
+            matchLabels:
+              postgres: "true"
