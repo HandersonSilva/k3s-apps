@@ -27,7 +27,7 @@ spec:
   selector:
     matchLabels:
       app: redis-switch-software-sts
-  serviceName: "redis-switch-software-sts"
+  serviceName: "redis-switch-software-svc"
   replicas: 1 # by default is 1
   minReadySeconds: 10 # by default is 0
   template:

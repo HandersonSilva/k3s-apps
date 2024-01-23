@@ -1,23 +1,22 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: postgres-switch-software-sts
+  name: postgres-switch-software
   namespace: switch-software
 spec:
   selector:
     matchLabels:
-      app: postgres-switch-software-sts
-  serviceName: "postgres-switch-software-svc"
+      app: postgres-switch-software
   replicas: 1 # by default is 1
   minReadySeconds: 10 # by default is 0
   template:
     metadata:
       labels:
-        app: postgres-switch-software-sts # has to match .spec.selector.matchLabels
+        app: postgres-switch-software # has to match .spec.selector.matchLabels
     spec:
       terminationGracePeriodSeconds: 10
       containers:
-        - name: postgres-switch-software-sts
+        - name: postgres-switch-software
           image: postgres:15.3
           imagePullPolicy: "IfNotPresent"
           ports:
@@ -49,15 +48,14 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: postgres-switch-software-svc
+  name: postgres-switch-software
   namespace: switch-software
 spec:
   selector:
-    app: postgres-switch-software-sts
+    app: postgres-switch-software
   type: ClusterIP
   ports:
     - name: postgres-switch-software-dns
-      protocol: TCP
       port: 5432
       targetPort: 5432
 

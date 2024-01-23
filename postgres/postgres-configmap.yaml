@@ -1,7 +1,3 @@
-#POSTGRES_DB: switch-homolog
-#  POSTGRES_USER: switch-homolog
-#  POSTGRES_PASSWORD: c3z#7c10licx@Ti
-#
 apiVersion: v1
 kind: ConfigMap
 metadata:
