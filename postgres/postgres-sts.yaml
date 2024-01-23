@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres-switch-software-sts
-  namespace: switch-software
 spec:
   selector:
     matchLabels:
@@ -50,7 +49,6 @@ kind: Service
 apiVersion: v1
 metadata:
   name: postgres-switch-software-svc
-  namespace: switch-software
 spec:
   selector:
     app: postgres-switch-software-sts
@@ -66,7 +64,6 @@ spec:
 #kind: NetworkPolicy
 #metadata:
 #  name: postgres-switch-software-np
-#  namespace: switch-software
 #spec:
 #  podSelector:
 #    matchLabels:

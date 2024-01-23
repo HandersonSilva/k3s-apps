@@ -2,7 +2,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: redis-config
-  namespace: switch-software
 data:
   redis.conf: |
     requirepass "$(REDIS_PASSWORD)"
@@ -14,7 +13,6 @@ stringData:
 kind: Secret
 metadata:
   name: redis-secret
-  namespace: switch-software
 type: Opaque
 
 ---
@@ -22,7 +20,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: redis-switch-software-sts
-  namespace: switch-software
 spec:
   selector:
     matchLabels:
@@ -59,7 +56,6 @@ kind: Service
 apiVersion: v1
 metadata:
   name: redis-switch-software-svc
-  namespace: switch-software
 spec:
   selector:
     app: redis-switch-software-sts
