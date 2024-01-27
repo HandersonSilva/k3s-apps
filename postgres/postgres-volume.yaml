@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: postgres-switch-software-pvc
 spec:
+  storageClassName: manual
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 3Gi
-  storageClassName: local-path
+      storage: 2Gi

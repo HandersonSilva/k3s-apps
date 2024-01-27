@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-switch-software-pv
+spec:
+  storageClassName: postgres-manual
+  capacity:
+    storage: 3Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: "XXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    path: "/XXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
