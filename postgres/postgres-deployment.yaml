@@ -52,8 +52,7 @@ spec:
   selector:
     app: postgres-switch-software
   type: ClusterIP
-  ports:
-    - name: postgres-switch-software-dns
+  ports:    - name: postgres-switch-software-dns
       port: 5432
       targetPort: 5432
 
